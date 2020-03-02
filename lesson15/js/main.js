@@ -101,7 +101,6 @@ class AppData {
     }
 
     showResult() {
-          const _this = this; // так как присвоение вне функции periodSelect, то this будет внешним
           budgetMonthValue.value = this.budgetMonth;
           budgetDayValue.value = this.budgetDay;
           expensesMonthValue.value = this.expensesMonth;
@@ -110,7 +109,7 @@ class AppData {
           targetMonthValue.value = this.getTargetMonth();
           incomePeriodValue.value = this.calcPeriod();
           periodSelect.addEventListener('input', () => {
-            incomePeriodValue.value = _this.calcPeriod();
+            incomePeriodValue.value = this.calcPeriod();
           });
     }
 
@@ -134,13 +133,12 @@ class AppData {
     }
 
     getExpenses() {
-          const _this = this;
           expensesItems.forEach((item) => {
             console.log(this.getExpenses);
             const nameExpenses = item.querySelector('.expenses-title').value;
             const amountExpenses = item.querySelector('.expenses-amount').value;
             if (nameExpenses !== '' && amountExpenses !== '') {
-              _this.expenses[nameExpenses] = +amountExpenses;
+              this.expenses[nameExpenses] = +amountExpenses;
             }
           });
     }
@@ -163,14 +161,13 @@ class AppData {
     }
 
     getIncome() { // ДОПОЛНИТЕЛЬНЫЙ ДОХОД
-          const _this = this;
           incomeItems.forEach((pair) => {
             const nameIncome = pair.querySelector('.income-title').value;
 
             const amountIncome = pair.querySelector('.income-amount').value;
 
             if (nameIncome !== '' && amountIncome !== '') {
-              _this.income[nameIncome] = +amountIncome;
+              this.income[nameIncome] = +amountIncome;
             }
           });
 
@@ -180,22 +177,20 @@ class AppData {
     }
 
     getAddExpenses() {
-          const _this = this;
           const addExpenses = additionalExpensesItems.value.split(', ');
           addExpenses.forEach((item) => {
             item = item.trim();
             if (item !== '') {
-              _this.addExpenses.push(item);
+              this.addExpenses.push(item);
             }
           });
     }
 
     getAddIncome() {
-          const _this = this;
           additionalIncomeItems.forEach((item) => {
             const itemValue = item.value.trim();
             if (itemValue !== '') {
-              _this.addIncome.push(itemValue);
+              this.addIncome.push(itemValue);
             }
           });
     }
