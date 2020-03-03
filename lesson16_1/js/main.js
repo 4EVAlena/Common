@@ -247,13 +247,34 @@ class AppData {
           }
     }
 
+    validatePercent(num) {
+      const isNumber = function (num) {
+        return !isNaN(parseFloat(num)) && isFinite(num) && num<100;
+      };
+      if(!isNumber(num)) {
+        num = '';
+      } else {
+        this.percentDeposit = num;
+      }
+    }
+
     changePercent() {
       const valueSelect = this.value;
       if (valueSelect === 'other') {
-        depositPercent.removeAttribute('disabled');  
-        depositPercent.style.display = 'inline-block';
-        depositPercent.value = '';
-          this.percentDeposit = depositPercent.value;
+          depositPercent.removeAttribute('disabled');  
+          depositPercent.style.display = 'inline-block';
+          depositPercent.value = '';
+          depositPercent.addEventListener('input', (event) => {
+            const isPercent = function (num) {
+              return !isNaN(parseFloat(num)) && isFinite(num) && num<=100;
+            };
+            if(!isPercent(event.target.value)) {
+              depositPercent.value = '';
+            } else {
+              this.percentDeposit = depositPercent.value;
+            }
+          });
+ 
       } else {
           depositPercent.style.display = 'none';
           depositPercent.value = valueSelect;
@@ -295,8 +316,10 @@ class AppData {
               target.value = target.value.replace(/[^0-9]+$/, '');
             } else if (placeholder === 'Наименование') {
               target.value = target.value.replace(/[^а-я\s.,]/i, ''); 
-            } else if (placeholder === 'Процент') {
-              target.value = target.value.replace(/^\\d{1,2}$/, '');
+            // } else if (placeholder === 'Процент') {
+              // target.value = target.value.replace(/[^1-9]?[0-9]?$/, '');
+              // target.value = target.value.replace(/^([1-9]{2}+[.]?[0-9]{2})$/, '');
+             // target.value = target.value.replace(/(^\d{1,2})\.\d{0,2}$/, '');
             }  
           };
           document.addEventListener('input', (event) => {
