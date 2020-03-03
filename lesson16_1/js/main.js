@@ -316,10 +316,6 @@ class AppData {
               target.value = target.value.replace(/[^0-9]+$/, '');
             } else if (placeholder === 'Наименование') {
               target.value = target.value.replace(/[^а-я\s.,]/i, ''); 
-            // } else if (placeholder === 'Процент') {
-              // target.value = target.value.replace(/[^1-9]?[0-9]?$/, '');
-              // target.value = target.value.replace(/^([1-9]{2}+[.]?[0-9]{2})$/, '');
-             // target.value = target.value.replace(/(^\d{1,2})\.\d{0,2}$/, '');
             }  
           };
           document.addEventListener('input', (event) => {
