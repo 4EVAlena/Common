@@ -171,7 +171,7 @@ class AppData {
     }
 
     getBudget() {
-          const monthDeposit = Math.floor(this.moneyDeposit * this.percentDeposit/100/12);
+          const monthDeposit = Math.floor(this.moneyDeposit * this.percentDeposit/12);
           this.budgetMonth = Math.floor(this.budget + this.incomeMonth - this.expensesMonth + monthDeposit);
           this.budgetDay = Math.floor(this.budgetMonth / 30);
     }
@@ -252,7 +252,7 @@ class AppData {
           depositPercent.value = '';
           depositPercent.addEventListener('input', (event) => {
             const isPercent = function (num) {
-              return !isNaN(parseFloat(num)) && isFinite(num) && num<=100;
+              return !isNaN(parseFloat(num)) && isFinite(num) && num<=1;
             };
             if(!isPercent(event.target.value)) {
               depositPercent.value = '';
@@ -319,7 +319,7 @@ class AppData {
             } else if (placeholder === 'Наименование') {
               target.value = target.value.replace(/[^а-я\s.,]/i, ''); 
             } else if (placeholder === 'Процент') {
-                target.value = target.value.replace(/[^0-9]+$/, ''); 
+                target.value = target.value.replace(/[^0-9.,]+$/, ''); 
             }
           };   
 
