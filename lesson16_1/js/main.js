@@ -1,6 +1,7 @@
 "use strict";
 const buttonStart = document.getElementById('start'),
       buttonPlus = document.getElementsByTagName('button'),
+      buttons = document.querySelectorAll('.control'),
       btnPlus1 = buttonPlus[0],
       btnPlus2 = buttonPlus[1],
       additionalIncomeItems = document.querySelectorAll('.additional_income-item'),
@@ -22,7 +23,7 @@ const buttonStart = document.getElementById('start'),
       additionalExpensesItems = document.querySelector('.additional_expenses-item'),
       targetAmount = document.querySelector('.target-amount'),
       periodAmount = document.querySelector('.period-amount'),
-      leftSide = document.querySelector('.data'),    
+      leftSideInputs = document.querySelector('.data').querySelectorAll('[type=text]'),    
       inputs = document.querySelectorAll('input[type=text]'),
       buttonCancel = document.getElementById('cancel'),
       depositBank = document.querySelector('.deposit-bank'),
@@ -64,17 +65,6 @@ class AppData {
           this.showResult();
     }
 
-    getCancel() {
-        if (event.target.closest('#start')) {
-          buttonStart.style.display = 'none'; // Рассчитать исчезает
-          buttonCancel.style.display = 'block'; // появляется Сбросить
-          inputs.forEach((item) => {
-            item.setAttribute('readonly', 1); // блокируем inputs
-            item.style.cssText = 'cursor: not-allowed';
-          });
-        }
-    }
-
     blockStart() {
           buttonStart.setAttribute('disabled', 1);
           buttonStart.style.cssText = 'cursor: not-allowed';
@@ -104,25 +94,21 @@ class AppData {
 
     addExpensesBlock() {
           const cloneExpensesBlock = expensesItems[0].cloneNode(true);
-
           for (let i = 0; i < cloneExpensesBlock.childNodes.length; i++) {
             cloneExpensesBlock.childNodes[i].value = '';
           }
-
           expensesItems[0].parentNode.insertBefore(cloneExpensesBlock, btnPlus2);
-
           expensesItems = document.querySelectorAll('.expenses-items');
 
           if (expensesItems.length === 3) {
             btnPlus2.style.display = 'none';
           }
-
           cloneExpensesBlock.style.placeholder = '';
     }
 
     getExpenses() {
           expensesItems.forEach((item) => {
-            console.log(this.getExpenses);
+            // console.log(this.getExpenses);
             const nameExpenses = item.querySelector('.expenses-title').value;
             const amountExpenses = item.querySelector('.expenses-amount').value;
             if (nameExpenses !== '' && amountExpenses !== '') {
@@ -133,15 +119,11 @@ class AppData {
 
     addIncomesBlock() {
           const cloneIncomeBlock = incomeItems[0].cloneNode(true);
-
           for (let i = 0; i < cloneIncomeBlock.childNodes.length; i++) {
             cloneIncomeBlock.childNodes[i].value = '';
           }
-
           incomeItems[0].parentNode.insertBefore(cloneIncomeBlock, btnPlus1);
-
           incomeItems = document.querySelectorAll('.income-items');
-
           if (incomeItems.length === 3) {
             btnPlus1.style.display = 'none';
           }
@@ -151,7 +133,6 @@ class AppData {
     getIncome() { // ДОПОЛНИТЕЛЬНЫЙ ДОХОД
           incomeItems.forEach((pair) => {
             const nameIncome = pair.querySelector('.income-title').value;
-
             const amountIncome = pair.querySelector('.income-amount').value;
 
             if (nameIncome !== '' && amountIncome !== '') {
@@ -159,9 +140,9 @@ class AppData {
             }
           });
 
-          for (const key in this.income) {
-            this.incomeMonth += +this.income[key];
-          }
+            for (const key in this.income) {
+                this.incomeMonth += +this.income[key];
+            }
     }
 
     getAddExpenses() {
@@ -185,12 +166,12 @@ class AppData {
 
     getExpensesMonth() {
           for (const key in this.expenses) {
-            this.expensesMonth += this.expenses[key];
+            this.expensesMonth += +this.expenses[key];
           }
     }
 
     getBudget() {
-          const monthDeposit = (this.moneyDeposit * (this.percentDeposit / 100))/12;
+          const monthDeposit = Math.floor(this.moneyDeposit * this.percentDeposit/12);
           this.budgetMonth = Math.floor(this.budget + this.incomeMonth - this.expensesMonth + monthDeposit);
           this.budgetDay = Math.floor(this.budgetMonth / 30);
     }
@@ -199,64 +180,69 @@ class AppData {
           return Math.ceil((targetAmount.value / this.budgetMonth));
     }
 
-    periodChange() {
-          periodSelect.addEventListener('input', () => {
-            periodAmount.textContent = periodSelect.value;
-          });
-    }
-
     calcPeriod() {
           return this.budgetMonth * periodSelect.value;
     }
 
     reset() {
-          if (event.target.closest('#cancel')) {
-            Object.assign(this, new AppData());
+        document.addEventListener('click', event => {
+        if (event.target.closest('#start')) {
+            buttonStart.style.display = 'none'; // Рассчитать исчезает
+            buttonCancel.style.display = 'block'; // появляется Сбросить
+            leftSideInputs.forEach((item) => {
+            item.setAttribute('readonly', 1); // блокируем inputs
+            item.style.cssText = 'cursor: not-allowed';
+            });
+            checkboxDepositCheck.setAttribute('disabled', 1);
+            btnPlus1.setAttribute('disabled', 1); // доп доходы блокируем ввод
+            btnPlus2.setAttribute('disabled', 1); // доп расходы блокируем ввод            
+        }
+        
+        else if (event.target.closest('#cancel')) { // если нажимаем на Очистить
+            Object.assign(this, new AppData()); // обнуляем данные в объекте
 
-            inputs.forEach((item) => {
-              item.removeAttribute('readonly');
+            leftSideInputs.forEach((item) => {  // очищаем все поля
+              item.removeAttribute('readonly'); // снимаем с них блокировку
               item.value = '';
               item.style.cssText = 'cursor: default';
             });
 
-            for (let i = 0; i < incomeItems.length; i++) {
-                if (i !== 0) {
+            inputs.forEach((item) => {
+                item.value = '';
+            })
+
+            for (let i = 0; i < incomeItems.length; i++) { // убираем блоки в Income
+                if (i !== 0) {                        // все кроме первого
                   income.removeChild(incomeItems[i]);
                 }
             }
-            btnPlus1.style.display = 'block';
+            btnPlus1.style.display = 'block'; // показываем 1-ю кнопку +
+            btnPlus1.removeAttribute('disabled'); // кнопка доп доходы разблокировка
 
-            for (let i = 0; i < expensesItems.length; i++) {
-                if (i !== 0) {
-                  expenses.removeChild(expensesItems[i]);
+            for (let i = 0; i < expensesItems.length; i++) { // перебираем блоки в Расходах
+                if (i !== 0) {                             // кроме первого
+                  expenses.removeChild(expensesItems[i]); // удаляем остальные
                 }
             }
-            btnPlus2.style.display = 'block';
+            btnPlus2.style.display = 'block';   // показываем 2-ю кнопку +
+            btnPlus2.removeAttribute('disabled'); // кнопка доп расходы разблокировка
 
-            periodAmount.textContent = 1;
-            periodSelect.value = 1;
+            checkboxDepositCheck.checked = false; // скидываем галочку с Депозита
+            checkboxDepositCheck.removeAttribute('disabled'); // чекбокс можно снова кликать
+            depositBank.style.display = 'none'; // прячем селект с банками
+            depositBank.value = ''; // значение возвращаем к исходному
+            depositAmount.style.display = 'none'; // прячем окно сумма
 
-            buttonCancel.style.display = 'none';
-            buttonStart.style.display = 'block';
+            periodAmount.textContent = 1;  // Период расчета 1
+            periodSelect.value = 1; // значение ползунка 1
 
-            checkboxDepositCheck.checked = false;
-            checkboxDepositCheck.removeAttribute('disabled');
-            this.depositHandler();
+            buttonCancel.style.display = 'none'; // прячем кнопку Очистить
+            buttonStart.style.display = 'block'; // кнопка рассчитать появляется
 
-            this.blockStart();
-          }
-    }
-
-    validatePercent(num) {
-      const isNumber = function (num) {
-        return !isNaN(parseFloat(num)) && isFinite(num) && num<100;
-      };
-      if(!isNumber(num)) {
-        num = '';
-      } else {
-        this.percentDeposit = num;
-      }
-    }
+            this.blockStart(); // если поле зп не заполнено блокируем Рассчитать
+           }
+        });
+    }    
 
     changePercent() {
       const valueSelect = this.value;
@@ -280,14 +266,14 @@ class AppData {
           depositPercent.value = valueSelect;
       }
     }
-    // если галочка на допозите стоит: this.deposit = true; то
+    
     getInfoDeposit() {
     
       if (this.deposit) {
-          this.percentDeposit = +depositPercent.value; // записываем значение из полей инпутов в свойства объекта
-          this.moneyDeposit = +depositAmount.value;
+          this.percentDeposit = +depositPercent.value; // % используется в getBudget
+          this.moneyDeposit = +depositAmount.value; // сумма вклада используется в getBudget
       }
-    }
+    }    
 
     depositHandler() {
 
@@ -299,16 +285,32 @@ class AppData {
       } else {
             depositBank.style.display = 'none';
             depositAmount.style.display = 'none';
+            checkboxDepositCheck.style.display = 'none';
             depositBank.value = '';
             depositAmount.value = '';
             this.deposit = false; 
             depositBank.removeEventListener('change', this.changePercent);
       }
     }
-    
+// что тут не так - как альтернативный вариант?
+    // validate() {
+    //     leftSideInputs.forEach((input) => {
+    //         for(input.hasAttribute('placeholder')) {
+    //             const placeholder = input.getAttribute('placeholder');
+    //             if (placeholder === 'Сумма') {
+    //                 target.value = target.value.replace(/[^0-9]+$/, '');
+    //               } else if (placeholder === 'Наименование') {
+    //                 target.value = target.value.replace(/[^а-я\s.,]/i, ''); 
+    //               } else if (placeholder === 'Процент') {
+    //                   target.value = target.value.replace(/[^0-9]+$/, ''); 
+    //           }
+    //         }
+    //     });
+    // }    
+
     addEventListeners() {
-          btnPlus1.addEventListener('click', this.addIncomesBlock);
-          btnPlus2.addEventListener('click', this.addExpensesBlock);
+          btnPlus1.addEventListener('click', this.addIncomesBlock); 
+          btnPlus2.addEventListener('click', this.addExpensesBlock); 
 
           const validate = (target) => {
             const placeholder = target.getAttribute('placeholder');
@@ -316,24 +318,27 @@ class AppData {
               target.value = target.value.replace(/[^0-9]+$/, '');
             } else if (placeholder === 'Наименование') {
               target.value = target.value.replace(/[^а-я\s.,]/i, ''); 
-            }  
-          };
-          document.addEventListener('input', (event) => {
+            } else if (placeholder === 'Процент') {
+                target.value = target.value.replace(/[^0-9]+$/, ''); 
+            }
+          };   
+
+          document.addEventListener('input', (event) => { 
             validate(event.target);
           });
 
-         // событие change на checkbox Deposit
-          checkboxDepositCheck.addEventListener('change', this.depositHandler.bind(this));
+        //   leftSideInputs.addEventListener('input', this.validate.bind(this));
 
-          buttonStart.addEventListener('click', this.start.bind(this));
+          checkboxDepositCheck.addEventListener('change', this.depositHandler.bind(this)); 
 
-          buttonStart.addEventListener('click', this.getCancel);
+          buttonStart.addEventListener('click', this.start.bind(this)); 
 
-          buttonCancel.addEventListener('click', this.reset.bind(this));
+          periodSelect.addEventListener('input', () => {
+            periodAmount.textContent = periodSelect.value;
+          });
 
+          this.reset();
           this.blockStart();
-
-          this.periodChange();
 
     }
 }
