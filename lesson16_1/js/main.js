@@ -171,7 +171,7 @@ class AppData {
     }
 
     getBudget() {
-          const monthDeposit = Math.floor(this.moneyDeposit * this.percentDeposit/12);
+          const monthDeposit = Math.floor(this.moneyDeposit * this.percentDeposit/100/12);
           this.budgetMonth = Math.floor(this.budget + this.incomeMonth - this.expensesMonth + monthDeposit);
           this.budgetDay = Math.floor(this.budgetMonth / 30);
     }
