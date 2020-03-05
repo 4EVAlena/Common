@@ -255,9 +255,12 @@ class AppData {
               return !isNaN(parseFloat(num)) && isFinite(num) && num<=100;
             };
             if(!isPercent(event.target.value)) {
+              alert ("Введите корректное значение в поле проценты");
+              buttonStart.setAttribute('disabled', 1);
               depositPercent.value = '';
             } else {
               this.percentDeposit = depositPercent.value;
+              buttonStart.removeAttribute('disabled');
             }
           });
  
