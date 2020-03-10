@@ -15,8 +15,8 @@ const greeting = document.getElementById('greeting'),
             seconds = Math.floor(timeRemaining % 60),
             minutes = Math.floor((timeRemaining / 60) % 60),
             hours = Math.ceil(timeRemaining / 60 / 60) % 24,
-            days = Math.floor(timeRemaining / 60 / 60 / 24),
-            timeToString = date.toLocaleTimeString('en');
+            days = Math.floor(timeRemaining / 60 / 60 / 24);
+            // timeToString = date.toLocaleTimeString('en');
 
         if (hours < 10) {
             hours = `0${hours}`;
@@ -28,7 +28,7 @@ const greeting = document.getElementById('greeting'),
             seconds = `0${seconds}`;
         }
 
-        return {currentHour, timeRemaining, hours, minutes, seconds, timeToString, days, date};
+        return {currentHour, timeRemaining, hours, minutes, seconds, days, date};
     };
 
 let toScreen = () => {
@@ -44,12 +44,19 @@ let toScreen = () => {
     } else if (timer.currentHour >= 0 && timer.currentHour < 5) {
         greeting.textContent = `Доброй ночи!`;
     }  
-           
-    dayOfToday.textContent = `Сегодня: ${day[timer.date.getDay()]}`;
+    // выводим день через индекс в массиве day, так как timer.date.getDay() возвращает 2     
+    // dayOfToday.textContent = `Сегодня: ${day[timer.date.getDay()]} ${timer.date.toLocaleDateString()}`;
+    // или
+    dayOfToday.textContent = `Сегодня: ${day[timer.date.getDay()]} ${timer.date.toISOString().substr(0, 10)}`;
+
+
 
     let showTime = function(){
         let timer = getTimeRemaining();
-        currentTime.textContent = `Текущее время: ${timer.timeToString}`;
+        currentTime.textContent = `Текущее время: ${timer.date.toLocaleTimeString('en')}`;
+        // если так, то когда будет менее 10, то 0 впереди отображаться не будет
+        // currentTime.textContent = `Текущее время: ${timer.date.getHours()} : ${timer.date.getMinutes()} : ${timer.date.getSeconds()}`;
+
         setInterval(showTime, 1000);    
     };
     showTime();
