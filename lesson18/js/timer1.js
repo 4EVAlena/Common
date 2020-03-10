@@ -13,24 +13,19 @@ window.addEventListener('DOMContentLoaded', function() {
                   seconds = Math.floor(timeRemaining % 60),                
                   minutes = Math.floor((timeRemaining / 60) % 60), 
                   hours = Math.floor(timeRemaining / 60 / 60); 
-        
-            if (hours >= 0 && hours < 10) {
-                hours = '0' + hours;
-            } else if (hours < 0) {
-                hours = '00';
-            }
 
-            if (minutes >= 0 && minutes < 10) {
-                minutes = '0' + minutes;
-            }  else if (minutes < 0) {
-                minutes = '00';
-            }
+            if (hours < 10) { 
+                hours = `0${hours}`;
+            } 
 
-            if (seconds >= 0 && seconds < 10) {
-                seconds = '0' + seconds;
-            }  else if (seconds < 0) {
-                seconds = '00';
+            if (minutes < 10) { 
+                minutes = `0${minutes}`;
             }    
+
+            if (seconds < 10) {
+                seconds = `0${seconds}`;
+            }  
+   
             return {timeRemaining, hours, minutes, seconds}; // в современном синтаксисе
         }    
  
@@ -53,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     countTimer('11 March 2020');
-
+    //menu
     const toggleMenu = () => {
         const btnMenu = document.querySelector('.menu'),
               menu = document.querySelector('menu'),
@@ -71,45 +66,51 @@ window.addEventListener('DOMContentLoaded', function() {
     };
 
     toggleMenu();
-
+   //popup
     const togglePopup = () => {
         const popup = document.querySelector('.popup'),
-            popupBtn = document.querySelectorAll('.popup-btn'),
-            popupСontent = document.querySelector('.popup-content'),
-            popupClose = document.querySelector('.popup-close');
+              popupBtn = document.querySelectorAll('.popup-btn'),
+              popupСontent = document.querySelector('.popup-content');
 
         popupBtn.forEach(elem => {
             elem.addEventListener('click', () => {
-                if (screen.width > 768) {     // если экран больше 768 пикселей
+            popup.style.display = "block";
 
-                    popup.style.display = 'block';  // отображаем модальное окно
-                    
-                    const start = Date.now();   // кол-во миллисекунд в момент открытия
-                    const height = (document.documentElement.clientHeight/2) - (popupСontent.clientHeight/2); 
-                
+                if (screen.width > 768) {
+                    // console.log(screen.width);
+                    const start = Date.now();
+        
+                    const draw = timePassed => {
+                        let dist = +getComputedStyle(popupСontent).width.split("px")[0];
+                        dist = -dist / 2 + 50 + "px";
+                        popupСontent.style.left = timePassed / 16 + "%";
+                        popupСontent.style.marginLeft = dist;
+                    };
+        
                     const timer = setInterval(() => {
                         const timePassed = Date.now() - start;
-                        if (timePassed >= height) {
-                            clearInterval(timer); 
+                        if (timePassed >= 800) {
+                            clearInterval(timer);
                             return;
                         }
-                        let draw = function(timePassed) {
-                        
-                            popupСontent.style.top = timePassed + 'px';
-                        };
-
-                        draw(timePassed);
-                          
-                    }, 20);                
-                                               
         
-                } else {
-                    popup.style.display = 'block';
+                        draw(timePassed);
+                    });
                 }
-            });
+            }); 
         });
-        popupClose.addEventListener('click', () => {
-            popup.style.display = 'none';
+  
+        popup.addEventListener('click', (event) => {
+            let target = event.target;
+            if(target.classList.contains('popup-close')){
+                popup.style.display = 'none';
+            } else {
+
+                target = target.closest('.popup-content');
+                if(!target) {
+                    popup.style.display = 'none';
+                }
+            }    
         });
     };
 
