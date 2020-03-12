@@ -42,6 +42,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 idInterval = setInterval(updateClock, 1000);
             } else if(timer.timeRemaining <=0) {
                 clearInterval(idInterval);
+                timerHours.textContent = `00`;
+                timerMinutes.textContent = `00`;
+                timerSeconds.textContent = `00`;
             }
         }
             updateClock();
@@ -50,21 +53,32 @@ window.addEventListener('DOMContentLoaded', function() {
     countTimer('12 March 2020');
 
     const toggleMenu = () => {
-        const btnMenu = document.querySelector('.menu'), // line 45
-              menu = document.querySelector('menu'); // line 96
- 
-        btnMenu.addEventListener('click', event => { 
-        let target = event.target;
-            if (target.classList.contains('close-btn')) { 
-                menu.style.display = 'none';
+        const menu = document.querySelector('menu'); // line 96
+        const handlerMenu = () => {
+
+            if (screen.width < 768) {
+                if (!menu.style.transform || menu.style.transform === `translate(-100%)`) {
+                        menu.style.transform = `translate(0)`;
+                    } else {
+                        menu.style.transform = `translate(-100%)`;
+                    }
             } else {
-                target = target.closest('menu');  
-                if (!target) {
-                    menu.style.display = 'none';
-                }
+                menu.classList.toggle('active-menu');
             }
-        });   
-    };    
+        };
+    
+        document.body.addEventListener('click', () => {
+            const target = event.target;
+
+            if (target.closest('div.menu')) {
+                handlerMenu();
+            } else if (target.closest('.active-menu li a') || target.matches('menu.close-btn')) {
+                handlerMenu();
+            } else if (menu.classList.contains('active-menu') && !target.matches('.active-menu')) {
+                handlerMenu();
+            }
+        });
+    };     
 
     toggleMenu();
 
