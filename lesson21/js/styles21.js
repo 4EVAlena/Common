@@ -295,16 +295,16 @@ window.addEventListener('DOMContentLoaded', function() {
         const command = document.querySelector('.command');
 
         command.addEventListener('mouseover', (event) => {
-            let target = event.target;
-            const image1 = target.getAttribute('src');
-            const image2 = target.getAttribute('data-img');
+            const target = event.target,
+                image1 = target.getAttribute('src'),
+                image2 = target.getAttribute('data-img');
            
-                    if(target.hasAttribute('src')) {                 
-                            target.setAttribute('src', image2);
-                    }   
-                    command.addEventListener('mouseout', e => {
-                        e.target.setAttribute('src', image1);
-                    });               
+                if(target.hasAttribute('src')) {                 
+                        target.setAttribute('src', image2);
+                }   
+                command.addEventListener('mouseout', e => {
+                    e.target.setAttribute('src', image1);
+                });               
         });    
         
     };  
