@@ -284,7 +284,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const validate = target => {
             const placeholder = target.getAttribute('placeholder');
             if (placeholder === 'Номер телефона') {
-                target.value = target.value.replace(/[^0-9]+[.]?[0-9]*$/, '');
+                target.value = target.value.replace(/[^0-9\+?]+$/, '');
             } else if (placeholder === 'Ваше имя' || placeholder === 'Ваше сообщение') {
                 target.value = target.value.replace(/[^а-я\s]/i, '');
             } else if (placeholder === 'E-mail') {
