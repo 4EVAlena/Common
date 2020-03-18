@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = document.getElementById('btnShowAll')
     button.addEventListener('click', () => {
         const request = new XMLHttpRequest();
-        request.open('GET', './dbHeroes.json');
-        request.setRequestHeader('Content-type', 'application/json');
+        request.open('GET', 'dbHeroes.json');
+        request.setRequestHeader('Content-Type', 'application/json');
         request.send();
         request.addEventListener('readystatechange', (event) => {
             if(request.readyState === 4 && request.status === 200) {
