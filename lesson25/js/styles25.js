@@ -375,27 +375,38 @@ window.addEventListener('DOMContentLoaded', () => {
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem;';
 
-        const body = {};
-
         forms.forEach(form => {
             form.addEventListener('submit', event => {
                 event.preventDefault();
                 form.appendChild(statusMessage);
                 statusMessage.textContent = loadMessage;
                 const formData = new FormData(form);
+                const body = {};
                 formData.forEach((val, key) => {
                     body[key] = val;
-                });               
+                });   
+                postData(body)
+                    .then(() => {
+                        statusMessage.textContent = successMessage;
+                    })
+                    .catch(error => {
+                        statusMessage.textContent = errorMessage;
+                        console.error(error);
+                     })
+                    .finally(() => {                       
+                        setTimeout(() => {
+                            inputs.forEach(item => {
+                                item.value = '';
+                            });
+                            statusMessage.innerText = '';                         
+                        }, 2500);
+                    }) 
             });
         });
 
         const postData = body => {
             return new Promise ((resolve, reject) => {
             const request = new XMLHttpRequest();
-            request.open('POST', './server.php');
-            request.setRequestHeader('Content-Type', 'application/json');
-
-
                 request.addEventListener('readystatechange', () => {
                     if (request.readyState !== 4) {
                         return;
@@ -406,32 +417,15 @@ window.addEventListener('DOMContentLoaded', () => {
                         reject(error);
                     }
                 });
-
-                // request.setRequestHeader('Content-Type', 'application/json');
-
-                request.send(JSON.stringify(body));
-            });
-        };    
-        
-
-        postData(body, inputs)
-            .then(() => {
-                statusMessage.textContent = successMessage;
-            })
-            .catch(error => {
-                statusMessage.textContent = errorMessage;
-                console.error(error);
-            })
-            .finally(inputs => {
-                inputs.forEach(item => {
-                    item.value = '';
-                });    
-
-                statusMessage.textContent = '';                      
-            })
-    };
+                request.open('POST', './server.php');
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.send(JSON.stringify(body));              
+            });     
+        };
+    };    
     sendForm();
-});    
+});
+
 
 
 
