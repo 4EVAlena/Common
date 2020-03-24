@@ -34,9 +34,7 @@ const sendForm = () => {
                  })
                 .finally(() => {                       
                     setTimeout(() => {
-                        inputs.forEach(item => {
-                            item.value = '';
-                        });
+                        inputs.forEach(item => item.value = '');
                         statusMessage.innerText = '';                         
                     }, 2500);
                 }); 

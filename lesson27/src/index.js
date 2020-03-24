@@ -15,6 +15,7 @@ import slider from './modules/slider';
 import valid from './modules/valid';
 import team from './modules/team';
 import calc from './modules/calc';
+import carousel from './modules/carousel';
 import sendForm from './modules/sendForm';
 
 
@@ -34,5 +35,9 @@ import sendForm from './modules/sendForm';
     team();
     // calculator
     calc(100); // price
+    // carousel
+    carousel.init();
     // send-ajax-form     
     sendForm();
+
+    
