@@ -19,7 +19,7 @@ import sendForm from './modules/sendForm';
 
 
     // Timer
-    countTimer();
+    countTimer('26 march 2020');
     // menu
     toggleMenu();
     // popup

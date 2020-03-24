@@ -4,20 +4,11 @@ const sendForm = () => {
         successMessage = 'Спасибо! Мы скоро с Вами свяжемся!';
 
     const forms = document.querySelectorAll('form'); 
-    const inputs = document.querySelectorAll('form input'); 
+    const inputs = document.querySelectorAll('form input');
 
     const statusMessage = document.createElement('div');
     statusMessage.style.cssText = 'font-size: 2rem;';
-
-    const postData = body => {
-        return fetch ('./server.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': "application/json"
-            },
-            body: JSON.stringify(body),
-        });
-    };     
+    
 
     forms.forEach(form => {
         form.addEventListener('submit', event => {
@@ -43,12 +34,25 @@ const sendForm = () => {
                  })
                 .finally(() => {                       
                     setTimeout(() => {
-                        inputs.forEach(item => item.value = '');
+                        inputs.forEach(item => {
+                            item.value = '';
+                        });
                         statusMessage.innerText = '';                         
                     }, 2500);
                 }); 
         });
-    });   
+    });
+
+    const postData = body => {
+        return fetch ('./server.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify(body),
+        });
+    };    
+
 };
 
 export default sendForm;
