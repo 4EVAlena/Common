@@ -1,6 +1,5 @@
 const valid = () => {
     const inputs = document.querySelectorAll('input');
-    // console.log(inputs);
 
     const validate = target => {
         const placeholder = target.getAttribute('placeholder');

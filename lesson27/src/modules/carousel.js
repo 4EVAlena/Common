@@ -40,7 +40,6 @@ class SliderCarousel {
         }
 
         if (this.responsive) {
-            // console.log('1');
             this.responseInit();
         }    
     }
@@ -55,7 +54,6 @@ class SliderCarousel {
 
     addStyle() {
         let style = document.getElementById('sliderCarusel-style');
-        console.log(style);
         if (!style) {
             style = document.createElement('style');
             style.id = 'sliderCarusel-style';
@@ -88,7 +86,6 @@ class SliderCarousel {
     prevSlider() {        
         if (this.options.infinity || this.options.position > 0) {
             --this.options.position;
-            console.log(this.options.position);
             if (this.options.position < 0) {  
                 this.options.position = this.options.maxPosition; 
             }           

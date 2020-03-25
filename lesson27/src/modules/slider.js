@@ -92,7 +92,7 @@ const slider = () => {
             stopSlide();
         }
     });
-    // mouseout запускаем
+
     slider.addEventListener('mouseout', event => {
         if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
             startSlide();
