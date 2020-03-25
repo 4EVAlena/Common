@@ -7,8 +7,7 @@ const sendForm = () => {
     const inputs = document.querySelectorAll('form input');
 
     const statusMessage = document.createElement('div');
-    statusMessage.style.cssText = 'font-size: 2rem;';
-    
+    statusMessage.style.cssText = 'font-size: 30px; color: #19b5fe';
 
     forms.forEach(form => {
         form.addEventListener('submit', event => {
@@ -36,7 +35,7 @@ const sendForm = () => {
                     setTimeout(() => {
                         inputs.forEach(item => item.value = '');
                         statusMessage.innerText = '';                         
-                    }, 2500);
+                    }, 5000);
                 }); 
         });
     });

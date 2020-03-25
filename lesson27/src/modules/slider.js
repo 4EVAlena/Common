@@ -31,6 +31,7 @@ const slider = () => {
     const dot = document.querySelectorAll('.dot');
 
     const autoPlaySlide = () => {
+        nextSlide(dot, currentSlide, 'dot-active');
         prevSlide(slide, currentSlide, 'portfolio-item-active');
         prevSlide(dot, currentSlide, 'dot-active');
         currentSlide++;

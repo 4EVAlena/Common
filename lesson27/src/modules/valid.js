@@ -7,7 +7,7 @@ const valid = () => {
         if (placeholder === 'Номер телефона') {
             target.value = target.value.replace(/[^\+0-9]+$/, '');
         } else if (placeholder === 'Ваше имя' || placeholder === 'Ваше сообщение') {
-            target.value = target.value.replace(/[^а-я\s]/i, '');
+            target.value = target.value.replace(/[^А-Яа-я\s.,]/g, '');
         } else if (placeholder === 'E-mail') {
             target.value = target.value.replace(/^\w+@\w\./, '');
         } else if (target.matches('input.calc-item')) {
